@@ -1,10 +1,89 @@
 <html>
     <head>
         <title>
-            hello world
+            Excel String Functions: Theory, Syntax, and Practicals
         </title>
     </head>
     <body>
-        <h1>welcome to Agra </h1>
+        <h1>Excel String Functions</h1>
+        <p>
+            String (text) functions in Excel help you clean, split, combine, format,
+            and analyze text data such as names, emails, product codes, and addresses.
+        </p>
+
+        <h2>Theory</h2>
+        <ul>
+            <li><strong>Text extraction:</strong> Get specific characters from left, right, or middle positions.</li>
+            <li><strong>Text cleaning:</strong> Remove extra spaces or non-printable characters.</li>
+            <li><strong>Text joining:</strong> Merge words, names, or IDs into one formatted string.</li>
+            <li><strong>Case conversion:</strong> Convert text into upper, lower, or proper case.</li>
+            <li><strong>Search and replace:</strong> Find and replace characters/words in text.</li>
+        </ul>
+
+        <h2>Syntax and Practicals</h2>
+
+        <h3>1) LEFT</h3>
+        <p><strong>Syntax:</strong> =LEFT(text, [num_chars])</p>
+        <p><strong>Practical:</strong> If A2 = "SOFTECH123", then <code>=LEFT(A2,7)</code> returns "SOFTECH".</p>
+
+        <h3>2) RIGHT</h3>
+        <p><strong>Syntax:</strong> =RIGHT(text, [num_chars])</p>
+        <p><strong>Practical:</strong> If A2 = "SOFTECH123", then <code>=RIGHT(A2,3)</code> returns "123".</p>
+
+        <h3>3) MID</h3>
+        <p><strong>Syntax:</strong> =MID(text, start_num, num_chars)</p>
+        <p><strong>Practical:</strong> If A2 = "STI-2026-AGRA", then <code>=MID(A2,5,4)</code> returns "2026".</p>
+
+        <h3>4) LEN</h3>
+        <p><strong>Syntax:</strong> =LEN(text)</p>
+        <p><strong>Practical:</strong> If A2 = "Agra Center", then <code>=LEN(A2)</code> returns 11.</p>
+
+        <h3>5) TRIM</h3>
+        <p><strong>Syntax:</strong> =TRIM(text)</p>
+        <p><strong>Practical:</strong> If A2 has extra spaces like "  Rahul   Kumar  ", <code>=TRIM(A2)</code> returns "Rahul Kumar".</p>
+
+        <h3>6) UPPER / LOWER / PROPER</h3>
+        <p><strong>Syntax:</strong> =UPPER(text), =LOWER(text), =PROPER(text)</p>
+        <p><strong>Practical:</strong> If A2 = "rAhUl kuMaR", then:</p>
+        <ul>
+            <li><code>=UPPER(A2)</code> → "RAHUL KUMAR"</li>
+            <li><code>=LOWER(A2)</code> → "rahul kumar"</li>
+            <li><code>=PROPER(A2)</code> → "Rahul Kumar"</li>
+        </ul>
+
+        <h3>7) CONCAT / TEXTJOIN</h3>
+        <p><strong>Syntax:</strong> =CONCAT(text1, text2, ...), =TEXTJOIN(delimiter, ignore_empty, text1, ...)</p>
+        <p><strong>Practical:</strong> If A2 = "Rahul", B2 = "Kumar":</p>
+        <ul>
+            <li><code>=CONCAT(A2," ",B2)</code> → "Rahul Kumar"</li>
+            <li><code>=TEXTJOIN("-",TRUE,A2,B2)</code> → "Rahul-Kumar"</li>
+        </ul>
+
+        <h3>8) FIND / SEARCH</h3>
+        <p><strong>Syntax:</strong> =FIND(find_text, within_text, [start_num]), =SEARCH(find_text, within_text, [start_num])</p>
+        <p><strong>Practical:</strong> If A2 = "info@softech.com":</p>
+        <ul>
+            <li><code>=FIND("@",A2)</code> returns the position of "@".</li>
+            <li><code>=LEFT(A2,FIND("@",A2)-1)</code> extracts the username "info".</li>
+        </ul>
+
+        <h3>9) SUBSTITUTE / REPLACE</h3>
+        <p><strong>Syntax:</strong> =SUBSTITUTE(text, old_text, new_text, [instance_num]), =REPLACE(old_text, start_num, num_chars, new_text)</p>
+        <p><strong>Practical:</strong> If A2 = "Batch-2025":</p>
+        <ul>
+            <li><code>=SUBSTITUTE(A2,"2025","2026")</code> → "Batch-2026"</li>
+            <li><code>=REPLACE(A2,7,4,"2026")</code> → "Batch-2026"</li>
+        </ul>
+
+        <h2>Combined Practical Example</h2>
+        <p>
+            Goal: Convert email in A2 (e.g., "rahul.kumar@sti.com") into a clean name.
+        </p>
+        <p>
+            Formula: <code>=PROPER(SUBSTITUTE(LEFT(A2,FIND("@",A2)-1),"."," "))</code>
+        </p>
+        <p>
+            Output: "Rahul Kumar"
+        </p>
     </body>
 </html>
