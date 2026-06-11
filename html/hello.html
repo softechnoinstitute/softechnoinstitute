@@ -97,6 +97,22 @@
                 color: #1e293b;
                 background: #eef2ff;
             }
+
+            .program-link {
+                display: inline-block;
+                padding: 12px 18px;
+                margin-top: 12px;
+                color: #ffffff;
+                text-decoration: none;
+                background: #2563eb;
+                border-radius: 999px;
+                font-weight: 700;
+            }
+
+            .program-link:hover,
+            .program-link:focus {
+                background: #1d4ed8;
+            }
         </style>
     </head>
     <body>
@@ -221,6 +237,22 @@ print(classif.fit(X, y_multilabel).predict(X))</code></pre>
  [1 0 1 1 0]
  [1 0 1 1 0]
  [1 0 1 0 0]]</code></pre>
+            </section>
+
+            <section aria-labelledby="complete-programs">
+                <h2 id="complete-programs">Complete API Convention Programs</h2>
+                <p>
+                    The examples above are also available as one complete Python
+                    program. After installing the listed dependencies, run it
+                    from the project root to see type casting, parameter
+                    updates, multiclass fitting, binary indicator fitting, and
+                    multilabel fitting in sequence.
+                </p>
+                <pre><code>python -m pip install -r programs/requirements.txt
+python programs/scikit_learn_api_conventions.py</code></pre>
+                <a class="program-link" href="../programs/scikit_learn_api_conventions.py">
+                    Open the complete Scikit-learn API conventions program
+                </a>
             </section>
         </main>
     </body>
