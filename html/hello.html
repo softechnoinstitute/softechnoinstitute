@@ -1,10 +1,227 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
-        <title>
-            hello world
-        </title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Scikit-Learn Conventions</title>
+        <style>
+            :root {
+                color-scheme: light;
+                font-family: Arial, Helvetica, sans-serif;
+                line-height: 1.6;
+                color: #243044;
+                background: #f5f7fb;
+            }
+
+            body {
+                margin: 0;
+            }
+
+            main {
+                max-width: 980px;
+                margin: 0 auto;
+                padding: 48px 24px;
+            }
+
+            header {
+                padding: 32px;
+                margin-bottom: 32px;
+                color: #ffffff;
+                background: linear-gradient(135deg, #2563eb, #0f172a);
+                border-radius: 24px;
+                box-shadow: 0 20px 45px rgba(15, 23, 42, 0.18);
+            }
+
+            h1,
+            h2,
+            h3 {
+                line-height: 1.25;
+            }
+
+            h1 {
+                margin: 0 0 12px;
+                font-size: clamp(2rem, 5vw, 3.75rem);
+            }
+
+            h2 {
+                padding-bottom: 8px;
+                margin-top: 36px;
+                color: #1e3a8a;
+                border-bottom: 2px solid #dbeafe;
+            }
+
+            h3 {
+                margin-top: 28px;
+                color: #334155;
+            }
+
+            section {
+                padding: 28px;
+                margin-bottom: 24px;
+                background: #ffffff;
+                border-radius: 20px;
+                box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+            }
+
+            .interface-grid,
+            .principles-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                gap: 18px;
+                padding: 0;
+                list-style: none;
+            }
+
+            .interface-grid li,
+            .principles-grid li {
+                padding: 18px;
+                background: #f8fafc;
+                border: 1px solid #e2e8f0;
+                border-radius: 16px;
+            }
+
+            code,
+            pre {
+                font-family: "Courier New", Courier, monospace;
+            }
+
+            pre {
+                overflow-x: auto;
+                padding: 18px;
+                color: #e2e8f0;
+                background: #0f172a;
+                border-radius: 14px;
+            }
+
+            .output {
+                color: #1e293b;
+                background: #eef2ff;
+            }
+        </style>
     </head>
     <body>
-        <h1>welcome to Agra </h1>
+        <main>
+            <header>
+                <h1>Scikit-Learn Conventions</h1>
+                <p>
+                    Scikit-learn objects share a uniform API so estimators,
+                    predictors, and transformers can be built, inspected, and
+                    composed consistently.
+                </p>
+            </header>
+
+            <section aria-labelledby="interfaces">
+                <h2 id="interfaces">Core Interfaces</h2>
+                <ul class="interface-grid">
+                    <li>
+                        <strong>Estimator interface</strong>
+                        <p>Builds and fits models using methods such as <code>fit()</code>.</p>
+                    </li>
+                    <li>
+                        <strong>Predictor interface</strong>
+                        <p>Makes predictions with learned models using methods such as <code>predict()</code>.</p>
+                    </li>
+                    <li>
+                        <strong>Transformer interface</strong>
+                        <p>Converts data using methods such as <code>transform()</code> and <code>fit_transform()</code>.</p>
+                    </li>
+                </ul>
+            </section>
+
+            <section aria-labelledby="purpose">
+                <h2 id="purpose">Purpose of Conventions</h2>
+                <ul class="principles-grid">
+                    <li><strong>Consistency:</strong> all objects share a small, predictable set of methods.</li>
+                    <li><strong>Inspection:</strong> constructor parameters and learned values are exposed as public attributes.</li>
+                    <li><strong>Non-proliferation of classes:</strong> data is represented with NumPy arrays or SciPy sparse matrices, and hyperparameters use standard Python strings and values.</li>
+                    <li><strong>Composition:</strong> algorithms are assembled from existing building blocks whenever possible.</li>
+                    <li><strong>Sensible defaults:</strong> user-defined parameters have defaults that provide a reasonable baseline solution.</li>
+                </ul>
+            </section>
+
+            <section aria-labelledby="type-casting">
+                <h2 id="type-casting">Type Casting</h2>
+                <p>
+                    Many scikit-learn routines convert input data to a numeric
+                    representation such as <code>float64</code> during fitting or
+                    transformation.
+                </p>
+                <pre><code>import numpy as np
+from sklearn import random_projection
+
+rng = np.random.RandomState(0)
+X = rng.rand(10, 2000)
+X = np.array(X, dtype="float32")
+print(X.dtype)
+
+transformer = random_projection.GaussianRandomProjection()
+X_new = transformer.fit_transform(X)
+print(X_new.dtype)</code></pre>
+                <pre class="output"><code>float32
+float64</code></pre>
+            </section>
+
+            <section aria-labelledby="refitting">
+                <h2 id="refitting">Refitting and Updating Parameters</h2>
+                <p>
+                    Estimator hyperparameters can be updated after construction
+                    with <code>set_params()</code>, then the estimator can be fitted again.
+                </p>
+                <pre><code>from sklearn.datasets import load_iris
+from sklearn.svm import SVC
+
+X, y = load_iris(return_X_y=True)
+clf = SVC()
+
+clf.set_params(kernel="linear").fit(X, y)
+print(clf.predict(X[:5]))
+
+clf.set_params(kernel="rbf", gamma="scale").fit(X, y)
+print(clf.predict(X[:5]))</code></pre>
+                <pre class="output"><code>[0 0 0 0 0]
+[0 0 0 0 0]</code></pre>
+            </section>
+
+            <section aria-labelledby="multiclass">
+                <h2 id="multiclass">Multiclass and Multilabel Fitting</h2>
+                <p>
+                    Learning and prediction behavior depends on the shape and
+                    format of the target data passed to <code>fit()</code>.
+                </p>
+
+                <h3>Multiclass labels</h3>
+                <pre><code>from sklearn.multiclass import OneVsRestClassifier
+from sklearn.svm import SVC
+
+X = [[1, 2], [3, 4], [4, 5], [5, 2], [1, 1]]
+y = [0, 0, 1, 1, 2]
+classif = OneVsRestClassifier(estimator=SVC(gamma="scale", random_state=0))
+print(classif.fit(X, y).predict(X))</code></pre>
+                <pre class="output"><code>[0 0 1 1 2]</code></pre>
+
+                <h3>Binary label indicators</h3>
+                <pre><code>from sklearn.preprocessing import LabelBinarizer
+
+y_binary = LabelBinarizer().fit_transform(y)
+print(classif.fit(X, y_binary).predict(X))</code></pre>
+                <pre class="output"><code>[[0 0 0]
+ [0 0 0]
+ [0 1 0]
+ [0 1 0]
+ [0 0 0]]</code></pre>
+
+                <h3>Multilabel targets</h3>
+                <pre><code>from sklearn.preprocessing import MultiLabelBinarizer
+
+y_multilabel = [[0, 1], [0, 2], [1, 3], [0, 2, 3], [2, 4]]
+y_multilabel = MultiLabelBinarizer().fit_transform(y_multilabel)
+print(classif.fit(X, y_multilabel).predict(X))</code></pre>
+                <pre class="output"><code>[[1 0 1 0 0]
+ [1 0 1 0 0]
+ [1 0 1 1 0]
+ [1 0 1 1 0]
+ [1 0 1 0 0]]</code></pre>
+            </section>
+        </main>
     </body>
 </html>
